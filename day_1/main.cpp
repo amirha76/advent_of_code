@@ -4,55 +4,101 @@
 #include <cctype> // for converting variables 
 #include <vector> 
 #include <typeinfo> // to get the type of variable typeid(variable).name()
+#include <map>
+
 using namespace std;
 
 
-int main(){
+map<string, char> words {
+    {"one", '1'},
+    {"two", '2'},
+    {"three", '3'},
+    {"four", '4'},
+    {"five", '5'},
+    {"six", '6'},
+    {"seven", '7'},
+    {"eight", '8'},
+    {"nine", '9'}
+    };
+
+void first_problem(vector<string> &lines){
+    int sum = 0;
+    for (int i = 0; i < lines.size(); i++){
+        string line = lines[i];
+        vector<char> numbers;
+        for (int j = 0; j < line.length(); j++){
+            if (isdigit(line[j])){
+                numbers.push_back(line[j]);
+            }
+        }
+        string combined = "";
+        combined += numbers[0];
+        combined += numbers[numbers.size()-1];
+
+        sum += stoi(combined);
+    }
+    cout << "======== Part One ========" << endl;
+    cout << "The answer: " << sum << endl;
+}
+
+void second_problem(vector<string> &lines){
+    int sum = 0;
+    for (int i=0; i < lines.size();i++){
+        string line = lines[i];
+        vector<char> numbers;
+
+        for (int k=0; k<line.length(); k++){
+            if (isdigit(line[k])){
+                numbers.push_back(line[k]);
+            }
+            for (int j=1; j < line.length(); j++){
+                string sub = line.substr(k, j); // string substr (size_t pos, size_t len)
+                map<string, char>::iterator map_iterator = words.find(sub);
+                
+                if (map_iterator != words.end()){
+                    numbers.push_back(map_iterator->second);
+                    break;
+                }
+            }
+        }
+        string combined = "";
+        combined += numbers[0];
+        combined += numbers[numbers.size()-1];
+
+        sum += stoi(combined);
+    }
+    cout << "======== Part Two ========" << endl;
+    cout << "The answer: " << sum << endl;
+}
+int main()
+{
     
     // ofstream     Creates and writes to files
     // ifstream     Reads from files
     // fstream      A combination of ofstream and ifstream: creates, reads, and writes to files
 
-    string line;
-    string digits ="";
-    vector<int> numbers = {}; // a vector like list in python which you can append to it; need <vector> header
-    int n;
-    string first_digit, second_digit;
-    double sum = 0;
-
     // read a file 
-    ifstream myfile ("text.txt");
-    if (myfile.is_open()){
-        while (getline (myfile, line)){
-            digits = "";
-            // how to loop in string 
-            for (char c:line){
-                if (isdigit(c)){
-                    digits.push_back(c);
-                }
-            }
-            
-            if (digits.size() == 0){
-                numbers.push_back(digits.size());
-            }
-            else if (digits.size() == 1){ // **
-                numbers.push_back(stoi(digits) * 11); // convert from string to int 
-            }
-            else {
-                first_digit = digits[0];
-                second_digit = digits[digits.size() - 1];
-                numbers.push_back(stoi(first_digit + second_digit)); // **
-            }
+    ifstream my_file;
+
+    my_file.open("input.txt");
+    if (!my_file.is_open()){
+        cout << "Unable to open the file" << endl;
+        return 1;
+    }
+
+    string line;
+    vector<string> lines;
+
+    while (getline (my_file, line)){
+        if (line.empty()){
+            break;
         }
-        myfile.close();
+        lines.push_back(line);
     }
 
-    else cout << "Unable to open the file";
+    first_problem(lines);
+    second_problem(lines);
     
-    for (int i=0; i<numbers.size(); ++i) {
-        sum += numbers[i];
-    }
 
-    cout << "sum of all data is: " << sum <<endl;
     return 0;
 }

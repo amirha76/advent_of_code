@@ -1,5 +1,5 @@
 # open 'text.txt' file 
-with open('text.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     lines = file.readlines()
 
 
@@ -22,4 +22,4 @@ sum = 0
 for num in numbers:
     sum += num
     
-print("the sum of all numbers is: ", sum)
+print("the answer: ", sum)
