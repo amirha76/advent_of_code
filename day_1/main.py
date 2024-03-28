@@ -1,25 +1,59 @@
-# open 'text.txt' file 
-with open('input.txt', 'r') as file:
-    lines = file.readlines()
+def first_problem(lines):
+    sum = 0 
+    for line in lines:
+        numbers = []
+        for char in line:
+            if char.isdigit():
+                numbers.append(char)
+            
+        combined = ""
+        combined += numbers[0]
+        combined += numbers[len(numbers) - 1]
+        sum += int(combined) 
 
-
-numbers = []
-
-for line in lines:
-    digits = ''
-    for char in line:
-        if char.isdigit():
-            digits += char
-    if len(digits) == 0:
-        numbers.append(0)
-    elif len(digits) == 1:
-         numbers.append(int(digits) * 11)
-    else:
-        numbers.append(int(digits[0]+digits[-1]))   
+    print("=========== Part One ===========")
+    print("The answer: ", sum)
+    
+def second_problem(lines):
+    mapped_data = {"one": '1', 
+                  "two": '2',
+                  "three": '3',
+                  "four": '4',
+                  "five": '5',
+                  "six": '6',
+                  "seven": '7',
+                  "eight": '8',
+                  "nine": '9'}
+    sum = 0
+    for line in lines:
+        numbers = []
+        for i in range(len(line)):
+            if line[i].isdigit():
+                numbers.append(line[i])
+            for k in range(1, len(line)):
+                temp = line[i:k]
+                if temp in mapped_data:
+                    numbers.append(mapped_data[temp])
+                    break
+        combined = ""
+        combined += numbers[0]
+        combined += numbers[len(numbers) - 1]
+        sum += int(combined)
+        
+    print("=========== Part Two ===========")
+    print("The answer: ", sum)
     
     
-sum = 0
-for num in numbers:
-    sum += num
     
-print("the answer: ", sum)
+if __name__ == '__main__':
+    
+    # open 'input.txt' file 
+    try: 
+        with open('input.txt', 'r') as file:
+            lines = file.readlines()
+    except:
+        print("Unable to open the file.")
+        
+    
+    first_problem(lines)
+    second_problem(lines)
